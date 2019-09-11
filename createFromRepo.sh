@@ -9,6 +9,8 @@ cd /var/www/html/laravel
 
 git clone $repository $projectName
 
+cd /var/www/html/laravel/$projectName
+
 composer install
 
 cp .env.example .env
