@@ -50,4 +50,8 @@ content="127.0.0.1 $domain"
 
 sudo sh -c "echo $content >> /etc/hosts"
 
+cd /var/www/html/laravel/$projectName
+
+code .
+
 echo "All Done. Visit $domain"
