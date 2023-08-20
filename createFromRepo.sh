@@ -1,15 +1,17 @@
 #!/bin/bash
 clear
 
-read -p "Please enter the project name: " projectName
+read -p "Project name: " projectName
+read -p "Repository url: " repository
 
-read -p "Please enter the repository url: " repository
+projectFolderName=/var/www/$projectName
 
-cd /var/www/html/laravel
+sudo mkdir $projectFolderName
+sudo chown -R faysal:faysal $projectFolderName
 
-git clone $repository $projectName
+git clone $repository $projectFolderName
 
-cd /var/www/html/laravel/$projectName
+cd $projectFolderName
 
 composer install
 
@@ -17,7 +19,10 @@ cp .env.example .env
 
 php artisan key:generate
 
-sudo chmod 777 -R /var/www/html/laravel/$projectName/storage
+mysql -u root -p663399 -e "create database $projectName"
+documentRoot=$projectFolderName/public
+sudo chown www-data:www-data -R $projectFolderName/storage
+sudo chown www-data:www-data -R $projectFolderName/bootstrap/cache
 
 domain=$projectName.test
 
@@ -31,9 +36,9 @@ sudo sh -c "cat > $conf <<EOF
     <VirtualHost *:80>
         ServerAdmin webmaster@localhost
         ServerName $domain
-        DocumentRoot /var/www/html/laravel/$projectName/public
+        DocumentRoot $documentRoot
 
-        <Directory /var/www/html/laravel/$projectName/public>
+        <Directory $documentRoot>
             Options Indexes FollowSymLinks
             AllowOverride All
             Require all granted
@@ -50,7 +55,7 @@ content="127.0.0.1 $domain"
 
 sudo sh -c "echo $content >> /etc/hosts"
 
-cd /var/www/html/laravel/$projectName
+cd $projectFolderName
 
 code .
 

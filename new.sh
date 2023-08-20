@@ -1,11 +1,24 @@
 #!/bin/bash
 clear
 
-read -p "Please enter the project name: " projectName
+read -p "Project name: " projectName
+read -p "Laravel? (y/n): " laravel
 
-composer create-project --prefer-dist laravel/laravel /var/www/html/laravel/$projectName
+projectFolderName=/var/www/$projectName
 
-sudo chmod 777 -R /var/www/html/laravel/$projectName/storage
+sudo mkdir $projectFolderName
+sudo chown -R faysal:faysal $projectFolderName
+
+if [ "$laravel" = "y" ] 
+then
+    composer create-project --prefer-dist laravel/laravel $projectFolderName
+    mysql -u root -p663399 -e "create database $projectName"
+    documentRoot=$projectFolderName/public
+    sudo chown www-data:www-data -R $projectFolderName/storage
+    sudo chown www-data:www-data -R $projectFolderName/bootstrap/cache
+else
+    documentRoot=$projectFolderName
+fi
 
 domain=$projectName.test
 
@@ -19,9 +32,9 @@ sudo sh -c "cat > $conf <<EOF
     <VirtualHost *:80>
         ServerAdmin webmaster@localhost
         ServerName $domain
-        DocumentRoot /var/www/html/laravel/$projectName/public
+        DocumentRoot $documentRoot
 
-        <Directory /var/www/html/laravel/$projectName/public>
+        <Directory $documentRoot>
             Options Indexes FollowSymLinks
             AllowOverride All
             Require all granted
@@ -38,7 +51,7 @@ content="127.0.0.1 $domain"
 
 sudo sh -c "echo $content >> /etc/hosts"
 
-cd /var/www/html/laravel/$projectName
+cd $projectFolderName
 
 code .
 
