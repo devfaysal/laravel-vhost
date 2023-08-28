@@ -20,6 +20,9 @@ cp .env.example .env
 php artisan key:generate
 
 mysql -u root -p663399 -e "create database $projectName"
+sed -i "s/DB_DATABASE=.*/DB_DATABASE=$projectName/g" $projectFolderName/.env
+sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=663399/g" $projectFolderName/.env
+php $projectFolderName/artisan migrate
 documentRoot=$projectFolderName/public
 sudo chown www-data:www-data -R $projectFolderName/storage
 sudo chown www-data:www-data -R $projectFolderName/bootstrap/cache
