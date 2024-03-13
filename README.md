@@ -2,6 +2,8 @@
 
 ``` git clone https://github.com/devfaysal/laravel-vhost.git ```
 
+``` cd laravel-vhost ```
+
 ``` sudo mv new.sh /usr/local/bin/newlaravelapp ```
 
 ``` sudo mv createFromRepo.sh /usr/local/bin/existinglaravelapp ```
