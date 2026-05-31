@@ -12,12 +12,12 @@ sudo chown -R faysal:faysal $projectFolderName
 if [ "$laravel" = "y" ] 
 then
     composer create-project --prefer-dist laravel/laravel $projectFolderName
-    mysql -u root -p663399 -e "create database $projectName"
+    mysql -u laravel -p663399 -e "create database $projectName"
     sed -i "s/DB_CONNECTION=.*/DB_CONNECTION=mysql/g" $projectFolderName/.env
     sed -i "s/# DB_HOST=.*/DB_HOST=127.0.0.1/g" $projectFolderName/.env
     sed -i "s/# DB_PORT=.*/DB_PORT=3306/g" $projectFolderName/.env
     sed -i "s/# DB_DATABASE=.*/DB_DATABASE=$projectName/g" $projectFolderName/.env
-    sed -i "s/# DB_USERNAME=.*/DB_USERNAME=root/g" $projectFolderName/.env
+    sed -i "s/# DB_USERNAME=.*/DB_USERNAME=laravel/g" $projectFolderName/.env
     sed -i "s/# DB_PASSWORD=.*/DB_PASSWORD=663399/g" $projectFolderName/.env
     php $projectFolderName/artisan migrate
     documentRoot=$projectFolderName/public
