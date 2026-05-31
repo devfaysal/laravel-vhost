@@ -19,9 +19,9 @@ cp .env.example .env
 
 php artisan key:generate
 
-mysql -u root -p663399 -e "create database $projectName"
+mysql -u laravel -p663399 -e "create database $projectName"
 sed -i "s/DB_DATABASE=.*/DB_DATABASE=$projectName/g" $projectFolderName/.env
-sed -i "s/DB_USERNAME=.*/DB_USERNAME=root/g" $projectFolderName/.env
+sed -i "s/DB_USERNAME=.*/DB_USERNAME=laravel/g" $projectFolderName/.env
 sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=663399/g" $projectFolderName/.env
 php $projectFolderName/artisan migrate
 php $projectFolderName/artisan db:seed
